@@ -277,3 +277,16 @@ export const useAppStore = create<AppState>()(
     }
   )
 )
+
+// Exportando os stores refatorados
+export { useTarefasStore } from './modules/tarefasStore';
+export { useAlimentacaoStore } from './modules/alimentacaoStore'; 
+export { useConfigStore } from './modules/configStore';
+export { useTempoStore } from './modules/tempoStore';
+export { useSaudeStore } from './modules/saudeStore';
+
+// Exporta utilitários
+export * from './utils';
+
+// Nota: Outros stores como tempoStore e saudeStore serão 
+// implementados em fases futuras da refatoração e adicionados aqui

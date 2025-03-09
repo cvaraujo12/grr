@@ -4,6 +4,7 @@ import { Header } from '@/app/components/layout/Header'
 import { Footer } from '@/app/components/layout/Footer'
 import { Providers } from '@/app/providers'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { AccessibilityMenu } from '@/app/components/ui/AccessibilityMenu'
 
 export const metadata: Metadata = {
   title: 'StayFocus',
@@ -36,6 +37,7 @@ export default function RootLayout({
               </main>
             </div>
           </div>
+          <AccessibilityMenu />
         </Providers>
         <SpeedInsights />
       </body>

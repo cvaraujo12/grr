@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo } from 'react'
 import { Calendar, Plus, X, Edit, Trash, Smile, Frown, Meh, AlertCircle } from 'lucide-react'
-import { useAppStore } from '@/app/store'
+import { useRegistroHumor } from '@/app/hooks/useRegistroHumor'
 import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
@@ -15,15 +15,16 @@ import { HumorCalendar } from './HumorCalendar'
 import { FatoresHumor } from './FatoresHumor'
 
 export function MonitoramentoHumor() {
-  // Usar o Zustand para gerenciamento de estado
-  const { registrosHumor, adicionarRegistroHumor, atualizarRegistroHumor, removerRegistroHumor } = useAppStore(
-    (state) => ({
-      registrosHumor: state.registrosHumor || [],
-      adicionarRegistroHumor: state.adicionarRegistroHumor,
-      atualizarRegistroHumor: state.atualizarRegistroHumor,
-      removerRegistroHumor: state.removerRegistroHumor,
-    })
-  )
+  // Usar o hook personalizado para registros de humor
+  const { 
+    registros, 
+    registrosHoje,
+    registrosRecentes,
+    adicionarRegistro, 
+    removerRegistro, 
+    atualizarRegistro,
+    getRegistrosPorData
+  } = useRegistroHumor()
   
   const [novoRegistro, setNovoRegistro] = useState({
     data: new Date().toISOString().split('T')[0],
@@ -46,7 +47,7 @@ export function MonitoramentoHumor() {
       return
     }
 
-    adicionarRegistroHumor({
+    adicionarRegistro({
       data: novoRegistro.data,
       nivel: novoRegistro.nivel,
       fatores: [...novoRegistro.fatores],
@@ -54,9 +55,9 @@ export function MonitoramentoHumor() {
     })
     
     resetForm()
-  }, [adicionarRegistroHumor, novoRegistro])
+  }, [adicionarRegistro, novoRegistro])
 
-  const iniciarEdicao = useCallback((registro: typeof registrosHumor[0]) => {
+  const iniciarEdicao = useCallback((registro: typeof registros[0]) => {
     setEditandoId(registro.id)
     setNovoRegistro({
       data: registro.data,
@@ -73,7 +74,7 @@ export function MonitoramentoHumor() {
       return
     }
 
-    atualizarRegistroHumor(editandoId, {
+    atualizarRegistro(editandoId, {
       data: novoRegistro.data,
       nivel: novoRegistro.nivel,
       fatores: [...novoRegistro.fatores],
@@ -81,7 +82,7 @@ export function MonitoramentoHumor() {
     })
     
     resetForm()
-  }, [atualizarRegistroHumor, editandoId, novoRegistro])
+  }, [atualizarRegistro, editandoId, novoRegistro])
 
   const adicionarFator = useCallback(() => {
     if (!novoFator) return
@@ -122,11 +123,11 @@ export function MonitoramentoHumor() {
 
   // Usar useMemo para cálculos ou transformações de dados
   const registrosOrdenados = useMemo(() => {
-    return [...registrosHumor].sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
-  }, [registrosHumor])
+    return [...registros].sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
+  }, [registros])
 
   const registrosPorMes = useMemo(() => {
-    const meses: Record<string, typeof registrosHumor> = {}
+    const meses: Record<string, typeof registros> = {}
     
     registrosOrdenados.forEach((registro) => {
       const [ano, mes] = registro.data.split('-')
@@ -143,20 +144,20 @@ export function MonitoramentoHumor() {
   }, [registrosOrdenados])
 
   const humorMedio = useMemo(() => {
-    if (registrosHumor.length === 0) return 0
+    if (registros.length === 0) return 0
     
-    const soma = registrosHumor.reduce((acc, registro) => acc + registro.nivel, 0)
-    return (soma / registrosHumor.length).toFixed(1)
-  }, [registrosHumor])
+    const soma = registros.reduce((acc, registro) => acc + registro.nivel, 0)
+    return (soma / registros.length).toFixed(1)
+  }, [registros])
 
   const tendenciaHumor = useMemo(() => {
-    if (registrosHumor.length < 5) return null
+    if (registros.length < 5) return null
     
-    const registrosRecentes = [...registrosHumor]
+    const registrosRecentes = [...registros]
       .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
       .slice(0, 5)
     
-    const registrosAnteriores = [...registrosHumor]
+    const registrosAnteriores = [...registros]
       .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
       .slice(5, 10)
     
@@ -171,7 +172,7 @@ export function MonitoramentoHumor() {
       valor: Math.abs(Number(diferenca.toFixed(0))),
       positivo: diferenca > 0
     }
-  }, [registrosHumor])
+  }, [registros])
 
   const formatarData = useCallback((data: string) => {
     return new Date(data).toLocaleDateString('pt-BR', {
@@ -202,7 +203,7 @@ export function MonitoramentoHumor() {
   }, [])
 
   const handleSelecionarDia = useCallback((data: string) => {
-    const registroExistente = registrosHumor.find(r => r.data === data)
+    const registroExistente = registros.find(r => r.data === data)
     
     if (registroExistente) {
       iniciarEdicao(registroExistente)
@@ -211,7 +212,7 @@ export function MonitoramentoHumor() {
       setMostrarForm(true)
       setEditandoId(null)
     }
-  }, [registrosHumor, iniciarEdicao])
+  }, [registros, iniciarEdicao])
 
   const nomeDoMes = useMemo(() => {
     return new Date(anoAtual, mesAtual).toLocaleDateString('pt-BR', { month: 'long' })
@@ -251,7 +252,7 @@ export function MonitoramentoHumor() {
             />
             
             <div className="md:col-span-2">
-              <FatoresHumor registros={registrosHumor} />
+              <FatoresHumor registros={registros} />
             </div>
           </div>
           
@@ -285,7 +286,7 @@ export function MonitoramentoHumor() {
             
             <div className="overflow-x-auto">
               <HumorCalendar
-                registros={registrosHumor}
+                registros={registros}
                 mes={mesAtual}
                 ano={anoAtual}
                 onSelectDay={handleSelecionarDia}
@@ -360,7 +361,7 @@ export function MonitoramentoHumor() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => removerRegistroHumor(registro.id)}
+                        onClick={() => removerRegistro(registro.id)}
                         aria-label="Remover registro"
                       >
                         <Trash className="h-4 w-4" />
