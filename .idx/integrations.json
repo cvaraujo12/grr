@@ -1,0 +1,10 @@
+{
+  "firebase_hosting": {
+    "deploymentHostingUrl": "https://stayfocus-a5744.web.app"
+  },
+  "cloud_run_deploy": {
+    "region": "southamerica-east1",
+    "sourceFlag": "--source .",
+    "allowUnauthenticatedInvocationsFlag": "--no-allow-unauthenticated"
+  }
+}
