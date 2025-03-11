@@ -1,0 +1,89 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Função para verificar se o usuário está autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Função para verificar se o documento pertence ao usuário atual
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Função para validar se um documento tem campos obrigatórios
+    function hasRequiredFields(data, fields) {
+      return data.keys().hasAll(fields);
+    }
+    
+    // Função para limitar o tamanho de um documento
+    function isUnderSizeLimit(data, limit) {
+      return data.size() < limit;
+    }
+    
+    // Função para validar um timestamp
+    function isValidTimestamp(timestamp) {
+      return timestamp is timestamp && 
+             timestamp <= request.time && 
+             timestamp.toMillis() > 0;
+    }
+    
+    // Regra base: negar acesso a todos por padrão
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    // Regras para perfil de usuário
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isOwner(userId);
+      allow delete: if false; // Não permitir exclusão de perfil
+    }
+    
+    // Regras para dados de usuários por coleção
+    match /perfil/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    match /sono/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    match /alimentacao/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    match /financas/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    match /estudos/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    match /autoconhecimento/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    match /hiperfocos/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    match /lazer/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    match /painelDia/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    // Regras para subcoleções
+    match /{collection}/{userId}/{subcollection}/{docId} {
+      allow read: if isOwner(userId);
+      allow write: if isOwner(userId) && 
+                   isUnderSizeLimit(request.resource.data, 1000000);
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "name": "Painel ND",
+  "short_name": "Painel ND",
+  "description": "Assistente pessoal para ajudar pessoas neurodivergentes com organização e produtividade",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4F46E5",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/images/logo.svg",
+      "sizes": "48x48 72x72 96x96 128x128 256x256",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/logo-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Hiperfocos",
+      "url": "/hiperfocos",
+      "description": "Gerenciar seus hiperfocos e projetos",
+      "icons": [{ "src": "/images/icons/rocket.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Sono",
+      "url": "/sono",
+      "description": "Gerenciar seu ciclo de sono",
+      "icons": [{ "src": "/images/icons/moon.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Perfil",
+      "url": "/perfil",
+      "description": "Configurar suas preferências",
+      "icons": [{ "src": "/images/icons/user.svg", "sizes": "96x96" }]
+    }
+  ],
+  "categories": ["productivity", "lifestyle", "health"],
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "screenshots": [
+    {
+      "src": "/images/screenshots/home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Tela inicial do Painel ND"
+    }
+  ],
+  "features": [
+    "Gestão de hiperfocos e projetos",
+    "Monitoramento do ciclo de sono",
+    "Lembretes de pausas",
+    "Preferências visuais personalizáveis",
+    "Modo escuro"
+  ]
+}

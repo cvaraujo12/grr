@@ -1,0 +1,245 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-dyslexic: 'Lexend', var(--font-sans);
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+  }
+
+  body {
+    @apply text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-900;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: var(--font-sans);
+  }
+
+  .fonte-alternativa body {
+    font-family: var(--font-dyslexic);
+    letter-spacing: 0.025em;
+  }
+
+  /* Melhor legibilidade para textos */
+  p, li, input, textarea {
+    @apply leading-relaxed max-w-prose;
+  }
+
+  /* Limita largura do texto para melhor legibilidade */
+  .container {
+    @apply max-w-5xl mx-auto px-4;
+  }
+
+  /* Espaçamento vertical consistente */
+  section {
+    @apply py-8;
+  }
+
+  /* Melhor contraste para links */
+  a:not(.btn) {
+    @apply text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200;
+  }
+  
+  /* Estilos para acessibilidade */
+  .alto-contraste {
+    --contrast-factor: 1.5;
+  }
+  
+  .alto-contraste .text-gray-500,
+  .alto-contraste .text-gray-400,
+  .alto-contraste .text-gray-300 {
+    @apply text-gray-900 dark:text-white;
+  }
+  
+  .alto-contraste .bg-gray-50,
+  .alto-contraste .bg-gray-100,
+  .alto-contraste .bg-gray-200 {
+    @apply bg-white dark:bg-gray-900;
+  }
+
+  /* Maior contraste para links e botões */
+  .alto-contraste a:not(.btn),
+  .alto-contraste button:not(.btn) {
+    @apply underline decoration-2 underline-offset-4;
+  }
+
+  /* Bordas mais visíveis em campos de formulário */
+  .alto-contraste input:not([type="checkbox"]):not([type="radio"]),
+  .alto-contraste textarea,
+  .alto-contraste select {
+    @apply border-2;
+  }
+  
+  .reducao-estimulos * {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .reducao-estimulos .bg-opacity-90,
+  .reducao-estimulos .bg-opacity-80,
+  .reducao-estimulos .bg-opacity-70 {
+    @apply bg-opacity-100;
+  }
+
+  /* Redução de sombras */
+  .reducao-estimulos .shadow,
+  .reducao-estimulos .shadow-md,
+  .reducao-estimulos .shadow-lg {
+    @apply shadow-none;
+  }
+
+  /* Redução de cores vibrantes */
+  .reducao-estimulos .bg-primary,
+  .reducao-estimulos .bg-success-light,
+  .reducao-estimulos .bg-warning-light,
+  .reducao-estimulos .bg-error-light {
+    @apply opacity-75;
+  }
+  
+  .texto-grande {
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .espacamento-linhas {
+    --line-height-multiplier: 1.8;
+  }
+
+  .espacamento-linhas p,
+  .espacamento-linhas li,
+  .espacamento-linhas input,
+  .espacamento-linhas textarea {
+    line-height: var(--line-height-multiplier);
+  }
+
+  .espacamento-linhas.texto-grande {
+    --line-height-multiplier: 2;
+  }
+  
+  .texto-grande h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+  
+  .texto-grande h2 {
+    font-size: 2rem;
+    line-height: 1.3;
+  }
+  
+  .texto-grande h3 {
+    font-size: 1.5rem;
+    line-height: 1.4;
+  }
+  
+  .texto-grande input,
+  .texto-grande button {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    @apply py-3;
+  }
+
+  /* Maior espaçamento para melhor legibilidade */
+  .texto-grande p {
+    @apply mb-6;
+  }
+
+  .texto-grande li {
+    @apply mb-3;
+  }
+}
+
+@layer components {
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-600 dark:focus-visible:ring-primary-400;
+  }
+  
+  .card {
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-soft p-6 transition-all duration-200;
+  }
+  
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200 focus-ring flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100;
+  }
+
+  .btn-success {
+    @apply bg-success-light hover:bg-success-dark text-white;
+  }
+
+  .btn-warning {
+    @apply bg-warning-light hover:bg-warning-dark text-white;
+  }
+
+  .btn-error {
+    @apply bg-error-light hover:bg-error-dark text-white;
+  }
+  
+  .input {
+    @apply px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus-ring w-full;
+  }
+
+  .input-group {
+    @apply flex flex-col gap-2;
+  }
+
+  .input-label {
+    @apply text-sm font-medium text-gray-700 dark:text-gray-300;
+  }
+
+  .input-error {
+    @apply text-sm text-error-light dark:text-error-dark mt-1;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-primary {
+    @apply bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200;
+  }
+
+  .badge-success {
+    @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+  }
+
+  .badge-warning {
+    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
+  }
+
+  .badge-error {
+    @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
+  }
+}
+
+@layer utilities {
+  /* Animações */
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

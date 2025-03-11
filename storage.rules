@@ -1,0 +1,35 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Função auxiliar para verificar autenticação
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Função para verificar se o usuário é dono do arquivo
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Regras para arquivos de perfil
+    match /users/{userId}/profile/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId);
+    }
+
+    // Regras para documentos e anexos
+    match /users/{userId}/documents/{fileName} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Regras para imagens de humor e atividades
+    match /users/{userId}/mood/{fileName} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // Regra padrão: negar todo o resto
+    match /{allPaths=**} {
+      allow read, write: false;
+    }
+  }
+}
